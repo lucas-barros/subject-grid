@@ -9,7 +9,7 @@ import { useSubjectUpdate } from "../hooks/useSubjectUpdate.ts";
 import { useSubjectDelete } from "../hooks/useSubjectDelete.ts";
 import { Filter } from "../components/Filters.tsx";
 import { SubjectForm } from "../types/subject.ts";
-import { SubjectsTable } from "../components/SubjectsTable.tsx";
+import { SubjectsTable } from "../components/subject-table/SubjectsTable.tsx";
 
 const isFilterActive = (filters: SubjectForm) => {
   return Object.values(filters).some(Boolean);

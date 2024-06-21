@@ -1,8 +1,8 @@
 import * as React from "react";
 import * as Toast from "@radix-ui/react-toast";
-import "./styles.css";
 import { Card, Flex, Text } from "@radix-ui/themes";
 import { RocketIcon } from "@radix-ui/react-icons";
+import "./styles.css";
 
 interface Props {
   open: boolean;
