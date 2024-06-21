@@ -1,0 +1,83 @@
+services:
+  client:
+    networks:
+      - front-tier
+      - back-tier
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    ports: ["8080:8080"]
+    environment:
+      - VITE_SERVER_HOST=http://${SERVER_HOST}:${SERVER_LOCAL_PORT}
+      - NODE_ENV=${NODE_ENV}
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /app/src
+        - action: rebuild
+          path: ./package.json
+          target: /app/package.json
+  node:
+    networks:
+      - back-tier
+    depends_on:
+      - db
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    volumes:
+      - ./server:/home/node/app
+      - /home/node/app/node_modules
+    ports:
+      - ${SERVER_LOCAL_PORT}:${SERVER_PORT}
+    develop:
+      watch:
+        - action: sync
+          path: ./src
+          target: /home/node/app/src
+        - action: rebuild
+          path: ./package.json
+          target: /home/node/app/package.json
+    env_file: .env
+    environment:
+      - DB_HOST=db
+  db:
+    image: postgres
+    restart: always
+    networks:
+      - back-tier
+    user: postgres
+    ports:
+      - ${DB_LOCAL_PORT}:${DB_PORT}
+    volumes:
+      - db:/var/lib/postgres
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    healthcheck:
+      test: ["CMD", "pg_isready"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  dbViewer:
+    image: dpage/pgadmin4:latest
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PASSWORD}
+    ports:
+      - "16543:80"
+    depends_on:
+      - db
+    networks:
+      - back-tier
+    
+networks:
+  front-tier:
+  back-tier:
+volumes:
+  db:
