@@ -2,9 +2,13 @@
 
 ## Overview
 
-This project involves creating a full-stack web application to display subject data in a grid format. The application includes a backend REST API built with Node.js, Express, and PostgreSQL, and a frontend built with React and Radix UI. The primary objective is to showcase subject data with features such as filtering, sorting, and pagination.
+This project involves creating a full-stack web application to display subject data. The application includes a backend REST API built with Node.js, Express, and PostgreSQL, and a frontend built with React and Radix UI. The primary objective is to showcase subject data with features such as filtering, sorting, and pagination.
 
 ## Usage
+
+## Requirements
+
+- Docker (recommended) or you may install Node.js v20, Postgres and setup the project manually
 
 ### Start
 
